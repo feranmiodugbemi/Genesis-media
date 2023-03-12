@@ -1,0 +1,41 @@
+Email = r["Email"]
+        password = r["Pword"]
+        mail = User.query.filter_by(email=Email).first()
+        passw = User.query.filter_by(password=password).first()
+        key ="secret"
+        if mail and passw:
+            token = jwt.encode({'user':Email}, key, algorithm="HS256")
+            
+            return {"res":"Valid email and password", 'token':token}
+        else:
+            return {"res":"Invalid email or Password"}
+
+
+
+
+
+
+
+
+
+
+
+ let Email = '';
+  let Pword = '';
+  let result = null;
+  let jsonres = false;
+ async function HandleLogin(){
+    const LoginValue = {Email:Email,Pword: Pword}
+    console.log(LoginValue)
+    const res = await fetch('http://127.0.0.1:5000/api/login',{
+      headers: {'content-type':'application/json', 'Access-Control-Allow-Origin':'*','Access-Control-Allow-Credentials':true},
+      mode:"no-cors",
+      method: "POST",
+      body: JSON.stringify(LoginValue)
+  })
+  jsonres = await res.json();
+  result = JSON.stringify(jsonres);
+  localStorage.setItem("token", jsonres.token)
+  if (jsonres.token){window.location.href = '/#/me'}
+  
+}
